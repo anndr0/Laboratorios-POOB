@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=NPTensor
+comment0.text=\ NPTensor.java\r\n\ \r\n\ @author\ CIS\ 2023-02\r\n
+comment1.params=
+comment1.target=NPTensor()
+comment2.params=name\ shape\ value
+comment2.target=void\ assign(java.lang.String,\ int[],\ int)
+comment3.params=name\ shape\ values
+comment3.target=void\ assign(java.lang.String,\ int[],\ int[])
+comment4.params=a\ unary\ b
+comment4.target=void\ assign(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment5.params=a\ unary\ b\ parameters
+comment5.target=void\ assign(java.lang.String,\ java.lang.String,\ java.lang.String,\ int[])
+comment6.params=a\ b\ sBinary\ c
+comment6.target=void\ assign(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment7.params=variable
+comment7.target=java.lang.String\ toString(java.lang.String)
+comment8.params=
+comment8.target=boolean\ ok()
+numComments=9
