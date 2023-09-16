@@ -85,24 +85,27 @@ public class NPTensorTest {
     }
 
     @Test
-    public void shouldAssignReshapedTensor() {
+    public void shouldReshapeTensor() {
+        // Crear un tensor con dimensiones originales [2, 3]
         int[] shapeA = {2, 3};
         int[] valuesA = {1, 2, 3, 4, 5, 6};
-        npTensor.assign("C", shapeA, valuesA);
-    
-        int[] newShape = {3, 2};
-        npTensor.assign("D", "reshape", "C", newShape);
-    
-        Tensor tensorD = npTensor.getValue("D");
-        assertNotNull(tensorD);
-    
-        // Verifica que la forma del tensor D sea la nueva forma esperada (3, 2)
-        assertArrayEquals(newShape, tensorD.getShape());
-    
-        // Verifica que los valores del tensor D sean los mismos que los valores originales, pero en una nueva forma
-        int[] expectedValuesD = {1, 2, 3, 4, 5, 6};
-        assertArrayEquals(expectedValuesD, tensorD.getValues());
-    
+        npTensor.assign("A", shapeA, valuesA);
+
+        // Realizar la operación de "reshape" en el tensor A
+        npTensor.assign("B", "reshape", "A");
+
+        // Obtener el tensor resultante
+        Tensor tensorB = npTensor.getValue("B");
+        assertNotNull(tensorB);
+
+        // Las dimensiones resultantes deben ser [3, 2]
+        int[] expectedShape = {3, 2};
+        assertArrayEquals(expectedShape, tensorB.getShape());
+
+        // Verificar que los valores del tensor B sean los mismos que los del tensor A
+        assertArrayEquals(valuesA, tensorB.getValues());
+        
+        // La operación debe ser exitosa
         assertTrue(npTensor.ok());
     }
 

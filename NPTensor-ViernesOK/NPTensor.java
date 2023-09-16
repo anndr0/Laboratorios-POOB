@@ -38,7 +38,10 @@ public class NPTensor {
     // Assigns the value of an operation to a variable (unary operations)
     public void assign(String a, String unary, String b) {
         Tensor tensorB = variables.get(b);
-
+    if (tensorB == null) {
+            operationSuccess = false;
+            return;
+        }
     if (unary.equals("shape")) {
             int[] dimensions = tensorB.getShape();
             int[] shape = {dimensions.length};
@@ -53,12 +56,11 @@ public class NPTensor {
         for (int i = 0; i < originalShape.length; i++) {
             newShape[i] = originalShape[originalShape.length - 1 - i];
         }
-        
         // Realiza el reshape y asigna el resultado a 'a'
         Tensor tensorA = tensorB.reshape(newShape);
         variables.put(a, tensorA);
     } else if (unary.equals("shuffle")) {
-        // Supongamos que 'b' es la variable que se va a barajar
+        //'b' es la variable que se va a barajar
         Tensor tensorA = tensorB.shuffle();
         variables.put(a, tensorA);
     } else {
@@ -100,9 +102,6 @@ public class NPTensor {
     public Tensor getValue(String name) {
         return variables.get(name);
     }
-    
-    
-    
 }
 
 
