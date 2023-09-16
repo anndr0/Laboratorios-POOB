@@ -1,0 +1,140 @@
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import java.util.Arrays;
+
+/**
+ * The test class NPTensorTest.
+ *
+ * @author  (your name)
+ * @version (a version number or a date)
+ */
+public class NPTensorTest {
+
+    private NPTensor npTensor;
+    @Before
+    public void setUp() {
+        npTensor = new NPTensor();
+    }
+
+    @Test
+    public void shouldAssignTensorWithSameValue() {
+        int[] shape = {3, 3};
+        int value = 5;
+        npTensor.assign("A", shape, value);
+        Tensor tensorA = npTensor.getValue("A");
+        assertNotNull(tensorA);
+        assertEquals(value, tensorA.value(new int[]{0, 0}));
+        assertEquals(value, tensorA.value(new int[]{2,2}));
+    }
+
+    @Test
+    public void shouldAssignTensorWithGivenValues() {
+        int[] shape = {2, 2};
+        int[] values = {1, 2, 3, 4};
+        npTensor.assign("B", shape, values);
+    
+        Tensor tensorB = npTensor.getValue("B");
+        assertNotNull(tensorB);
+        
+        int[] retrievedValues = new int[values.length];
+        int index = 0;
+        for (int i = 0; i < shape[0]; i++) {
+            for (int j = 0; j < shape[1]; j++) {
+                retrievedValues[index++] = tensorB.value(new int[]{i, j});
+            }
+        }
+    
+        assertArrayEquals(values, retrievedValues);
+        assertTrue(npTensor.ok());
+    }
+
+    @Test
+    public void shouldNotAssignMismatchedValues() {
+        int[] shape = {2, 2};
+        int[] values = {1, 2, 3}; // Mismatched number of values
+        npTensor.assign("C", shape, values);
+
+        assertNull(npTensor.getValue("C"));
+        assertFalse(npTensor.ok());
+    }
+
+    @Test
+    public void shouldNotAssignEmptyShape() {
+        int[] shape = {}; // Empty shape
+        int[] values = {1, 2, 3};
+        npTensor.assign("D", shape, values);
+
+        assertNull(npTensor.getValue("D"));
+        assertFalse(npTensor.ok());
+    }
+    
+    @Test
+    public void testAssignShapeOperation() {
+        NPTensor npTensor = new NPTensor();
+
+        int[] shape = {2, 3};
+        int[] values = {1, 2, 3, 4, 5, 6};
+
+        npTensor.assign("A", shape, values);
+
+        npTensor.assign("B", "shape", "A");
+
+        assertTrue(npTensor.ok());
+        assertEquals(Arrays.toString(shape), npTensor.toString("B"));
+    }
+
+    @Test
+    public void shouldAssignReshapedTensor() {
+        int[] shapeA = {2, 3};
+        int[] valuesA = {1, 2, 3, 4, 5, 6};
+        npTensor.assign("C", shapeA, valuesA);
+    
+        int[] newShape = {3, 2};
+        npTensor.assign("D", "reshape", "C", newShape);
+    
+        Tensor tensorD = npTensor.getValue("D");
+        assertNotNull(tensorD);
+    
+        // Verifica que la forma del tensor D sea la nueva forma esperada (3, 2)
+        assertArrayEquals(newShape, tensorD.getShape());
+    
+        // Verifica que los valores del tensor D sean los mismos que los valores originales, pero en una nueva forma
+        int[] expectedValuesD = {1, 2, 3, 4, 5, 6};
+        assertArrayEquals(expectedValuesD, tensorD.getValues());
+    
+        assertTrue(npTensor.ok());
+    }
+
+    @Test
+    public void shouldAssignShuffledTensor() {
+        int[] shapeE = {2, 3};
+        int[] valuesE = {1, 2, 3, 4, 5, 6};
+        npTensor.assign("E", shapeE, valuesE);
+    
+        npTensor.assign("F", "shuffle", "E");
+    
+        Tensor tensorF = npTensor.getValue("F");
+        assertNotNull(tensorF);
+        
+        int[] valuesF = tensorF.getValues();
+        assertFalse(Arrays.equals(valuesE, valuesF)); // Verifica que los valores no sean iguales
+        assertTrue(npTensor.ok());
+    }
+
+    @Test
+    public void shouldNotAssignInvalidUnaryOperation() {
+        int[] shapeG = {2, 2};
+        int[] valuesG = {1, 2, 3, 4};
+        npTensor.assign("G", shapeG, valuesG);
+
+        npTensor.assign("H", "invalidOperation", "G");
+        
+        assertNull(npTensor.getValue("H"));
+        assertFalse(npTensor.ok());
+    }
+}
+
+
+
+
