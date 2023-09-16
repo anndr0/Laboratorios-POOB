@@ -173,29 +173,29 @@ public class NPTensorTest {
     
     @Test
     public void shouldCalculateMean() {
-        int[] shape = {2, 2};
-        int[] values = {
-            1, 2,
-            3, 4
-        };
-        npTensor.assign("E", shape, values);
+        // Crear un tensor con algunos valores
+        int[] shape = {3, 3};
+        int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        npTensor.assign("A", shape, values);
     
-        // Prueba 1: Calcular la media en el eje 0 (filas)
-        int[] meanParams1 = {0};
-        npTensor.assign("F", "mean", "E", meanParams1);
-        Tensor result1 = npTensor.getValue("F");
-        assertNotNull(result1);
-        int[] expectedValues1 = {2, 3};
-        assertArrayEquals(expectedValues1, result1.getValues());
+        // Calcular el promedio del tensor A a lo largo del eje 0
+        int axis = 0;
+        npTensor.assign("B", "mean", "A", new int[]{axis});
     
-        // Prueba 2: Calcular la media en el eje 1 (columnas)
-        int[] meanParams2 = {1};
-        npTensor.assign("G", "mean", "E", meanParams2);
-        Tensor result2 = npTensor.getValue("G");
-        assertNotNull(result2);
-        int[] expectedValues2 = {1, 2};
-        assertArrayEquals(expectedValues2, result2.getValues());
+        // Obtener el tensor resultante
+        Tensor meanTensor = npTensor.getValue("B");
+        assertNotNull(meanTensor);
+    
+        // El resultado esperado es el promedio de los valores en el eje 0, que es 5
+        int[] expectedShape = {3};
+        int[] expectedValues = {5, 6, 7};
+        assertArrayEquals(expectedShape, meanTensor.getShape());
+        assertArrayEquals(expectedValues, meanTensor.getValues());
+        
+        // La operación debe ser exitosa
+        assertTrue(npTensor.ok());
     }
+
     
     @Test
     public void shouldFindValueInTensor() {

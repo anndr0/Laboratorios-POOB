@@ -92,14 +92,30 @@ public class NPTensor {
             Tensor slicedTensor = tensorB.slice(start, end);
             variables.put(a, slicedTensor);
         } else if (unary.equals("mean")) {
+        
             if (parameters.length != 1) {
-                operationSuccess = false; // Parámetros insuficientes para la operación "mean"
-                return;
-            }
-            int axis = parameters[0];
-            Tensor meanTensor = tensorB.mean(axis);
-            variables.put(a, meanTensor);
-        } else if (unary.equals("find")) {
+            operationSuccess = false; // Parámetros insuficientes para la operación "mean"
+            return;
+        }
+               
+        // Obtener los valores del tensor
+        int[] values = tensorB.getValues();
+        // Calcular la suma de los elementos
+        int sum = 0;
+        for (int value : values) {
+            sum += value;
+        }
+        // Calcular el promedio
+        int size = values.length;
+        int meanValue = (size > 0) ? sum / size : 0;
+        
+        // Crear un tensor con el valor promedio y asignarlo a 'a'
+        int[] shape = { 1 };
+        int[] meanValues = { meanValue };
+        Tensor meanTensor = new Tensor(shape, meanValues);
+        variables.put(a, meanTensor);
+        
+    } else if (unary.equals("find")) {
             if (parameters.length != 1) {
                 operationSuccess = false; // Parámetros insuficientes para la operación "find"
                 return;
