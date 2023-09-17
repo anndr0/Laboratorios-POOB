@@ -7,15 +7,25 @@ import java.util.Arrays;
     
 public class NPTensor {
 
-    private HashMap<String, Tensor> variables;
-    private boolean operationSuccess;
-    
+    private HashMap<String, Tensor> variables; // Mapa de variables donde se almacenan los tensores
+    private boolean operationSuccess; // Variable para rastrear si la última operación fue exitosa
+
+    /**
+     * Constructor de la clase NPTensor.
+     * Inicializa un mapa de variables y establece la operación inicial como exitosa.
+     */
     public NPTensor() {
         variables = new HashMap<>();
         operationSuccess = true;
     }
 
-    // Assign a tensor to a variable with all elements having the same value
+    /**
+     * Asigna un tensor a una variable con todos sus elementos con el mismo valor.
+     *
+     * @param name  Nombre de la variable.
+     * @param shape Forma del tensor.
+     * @param value Valor con el que se llenará el tensor.
+     */
     public void assign(String name, int[] shape, int value) {
         int[] values = new int[calculateSize(shape)];
         Arrays.fill(values, value);
@@ -24,7 +34,14 @@ public class NPTensor {
 
     }
 
-    // Assign a tensor to a variable with the given values
+    /**
+     * Asigna un tensor a una variable con los valores proporcionados.
+     *
+     * @param name   Nombre de la variable.
+     * @param shape  Forma del tensor.
+     * @param values Valores del tensor.
+     */
+    
     public void assign(String name, int[] shape, int[] values) {
         if (shape.length == 0 || calculateSize(shape) != values.length) {
             operationSuccess = false;
@@ -35,8 +52,15 @@ public class NPTensor {
         operationSuccess = true;
     }
 
-    // Assigns the value of an operation to a variable (unary operations)
+     /**
+     * Asigna el valor de una operación unaria a una variable.
+     *
+     * @param a     Nombre de la variable de destino.
+     * @param unary Operación unaria a realizar.
+     * @param b     Nombre de la variable de origen.
+     */
     public void assign(String a, String unary, String b) {
+        // Realiza una operación unaria (como "shape", "reshape" o "shuffle") en el tensor y asigna el resultado a la variable de destino.
         Tensor tensorB = variables.get(b);
     if (tensorB == null) {
             operationSuccess = false;
@@ -69,8 +93,16 @@ public class NPTensor {
         
     }
 
-    // Assigns the value of an operation to a variable (unary operations with parameters)
+    /**
+     * Asigna el valor de una operación unaria con parámetros a una variable.
+     *
+     * @param a          Nombre de la variable de destino.
+     * @param unary      Operación unaria con parámetros a realizar.
+     * @param b          Nombre de la variable de origen.
+     * @param parameters Parámetros de la operación.
+     */
         public void assign(String a, String unary, String b, int[] parameters) {
+            // Realiza una operación unaria con parámetros (como "slice", "mean" o "find") en el tensor y asigna el resultado a la variable de destino.
         Tensor tensorB = variables.get(b);
 
         if (unary.equals("slice")) {
@@ -128,8 +160,16 @@ public class NPTensor {
         }
     }
 
-    // Assigns the value of a simple binary operation to a variable (one to one)
+    /**
+     * Asigna el valor de una operación binaria a una variable.
+     *
+     * @param a       Nombre de la variable de destino.
+     * @param b       Nombre de la primera variable de origen.
+     * @param sBinary Operación binaria a realizar (por ejemplo, "add", "subtract", "multiply").
+     * @param c       Nombre de la segunda variable de origen.
+     */
     public void assign(String a, String b, String sBinary, String c) {
+        // Realiza una operación binaria entre dos tensores y asigna el resultado a la variable de destino.
         Tensor tensorB = variables.get(b);
         Tensor tensorC = variables.get(c);
 
@@ -155,15 +195,26 @@ public class NPTensor {
         variables.put(a, result);
         operationSuccess = true;
     }
-
-    // Returns the string representation of a tensor
+    /**
+     * Obtiene la representación en cadena de un tensor.
+     *
+     * @param variable Nombre de la variable que contiene el tensor.
+     * @return Representación en cadena del tensor asociado a la variable, o null si la variable no existe.
+     */
+    
     public String toString(String variable) {
+        // Returns the string representation of a tensor
         Tensor tensor = variables.get(variable);
         return (tensor != null) ? tensor.toString() : null;
     }
 
-    // If the last operation was successful
+    /**
+     * Comprueba si la última operación fue exitosa.
+     *
+     * @return true si la última operación fue exitosa, false en caso contrario.
+     */
     public boolean ok() {
+        // Verifica si la última operación fue exitosa.
         return operationSuccess;
     }
 
@@ -175,12 +226,27 @@ public class NPTensor {
         }
         return size;
     }
-    
+
+    /**
+     * Obtiene el valor de una variable en forma de tensor.
+     *
+     * @param name Nombre de la variable.
+     * @return Tensor asociado a la variable, o null si la variable no existe.
+     */
     public Tensor getValue(String name) {
+        // Obtiene el tensor asociado a una variable.
         return variables.get(name);
     }
-    
+
+    /**
+     * Calcula una función en un tensor y asigna el resultado a una variable.
+     *
+     * @param a       Nombre de la variable de destino.
+     * @param b       Nombre de la variable de origen.
+     * @param function Función a calcular (por ejemplo, "norm" o "trace").
+     */
     public void calculate(String a, String b, String function) {
+        // Calcula una función en un tensor (como "norm" o "trace") y asigna el resultado a la variable de destino.
         Tensor tensorB = variables.get(b);
 
         if (tensorB == null) {
@@ -203,8 +269,15 @@ public class NPTensor {
 
         operationSuccess = true;
     }
-    
+    /**
+     * Multiplica un tensor por un escalar y asigna el resultado a una variable.
+     *
+     * @param a      Nombre de la variable de destino.
+     * @param b      Nombre de la variable de origen.
+     * @param scalar Escalar por el que se multiplicará el tensor.
+     */
     public void multiplyScalar(String a, String b, int scalar) {
+        // Multiplica un tensor por un escalar y asigna el resultado a la variable de destino.
     Tensor tensorB = variables.get(b);
 
     if (tensorB == null) {
