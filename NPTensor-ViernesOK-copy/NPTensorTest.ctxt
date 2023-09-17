@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=NPTensorTest
-comment0.text=\r\n\ The\ test\ class\ NPTensorTest.\r\n\r\n\ @author\ \ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ The\ test\ class\ NPTensorTest.\r\n\r\n\ @author\ \ (Ana\ Mar\u00EDa\ Dur\u00E1n\ y\ Laura\ Natalia\ Rojas)\r\n
 comment1.params=
 comment1.target=void\ setUp()
 comment10.params=
@@ -9,6 +9,12 @@ comment11.params=
 comment11.target=void\ shouldCalculateMean()
 comment12.params=
 comment12.target=void\ shouldFindValueInTensor()
+comment13.params=
+comment13.target=void\ shouldAddTwoTensors()
+comment14.params=
+comment14.target=void\ shouldSubtractTwoTensors()
+comment15.params=
+comment15.target=void\ shouldMultiplyTwoTensors()
 comment2.params=
 comment2.target=void\ shouldAssignTensorWithSameValue()
 comment3.params=
@@ -25,4 +31,4 @@ comment8.params=
 comment8.target=void\ shouldAssignShuffledTensor()
 comment9.params=
 comment9.target=void\ shouldNotAssignInvalidUnaryOperation()
-numComments=13
+numComments=16

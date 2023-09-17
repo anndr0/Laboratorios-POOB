@@ -6,8 +6,7 @@ import java.util.Arrays;
 /**
  * The test class NPTensorTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author  (Ana María Durán y Laura Natalia Rojas)
  */
 public class NPTensorTest {
 
@@ -52,7 +51,7 @@ public class NPTensorTest {
     @Test
     public void shouldNotAssignMismatchedValues() {
         int[] shape = {2, 2};
-        int[] values = {1, 2, 3}; // Mismatched number of values
+        int[] values = {1, 2, 3}; // No coinciden los valores
         npTensor.assign("C", shape, values);
 
         assertNull(npTensor.getValue("C"));
@@ -61,7 +60,7 @@ public class NPTensorTest {
 
     @Test
     public void shouldNotAssignEmptyShape() {
-        int[] shape = {}; // Empty shape
+        int[] shape = {}; // vacio
         int[] values = {1, 2, 3};
         npTensor.assign("D", shape, values);
 
@@ -90,21 +89,16 @@ public class NPTensorTest {
         int[] shapeA = {2, 3};
         int[] valuesA = {1, 2, 3, 4, 5, 6};
         npTensor.assign("A", shapeA, valuesA);
-
         // Realizar la operación de "reshape" en el tensor A
         npTensor.assign("B", "reshape", "A");
-
         // Obtener el tensor resultante
         Tensor tensorB = npTensor.getValue("B");
         assertNotNull(tensorB);
-
         // Las dimensiones resultantes deben ser [3, 2]
         int[] expectedShape = {3, 2};
         assertArrayEquals(expectedShape, tensorB.getShape());
-
         // Verificar que los valores del tensor B sean los mismos que los del tensor A
         assertArrayEquals(valuesA, tensorB.getValues());
-        
         // La operación debe ser exitosa
         assertTrue(npTensor.ok());
     }
@@ -114,12 +108,10 @@ public class NPTensorTest {
         int[] shapeE = {2, 3};
         int[] valuesE = {1, 2, 3, 4, 5, 6};
         npTensor.assign("E", shapeE, valuesE);
-    
         npTensor.assign("F", "shuffle", "E");
     
         Tensor tensorF = npTensor.getValue("F");
         assertNotNull(tensorF);
-        
         int[] valuesF = tensorF.getValues();
         assertFalse(Arrays.equals(valuesE, valuesF)); // Verifica que los valores no sean iguales
         assertTrue(npTensor.ok());
@@ -132,11 +124,10 @@ public class NPTensorTest {
         npTensor.assign("G", shapeG, valuesG);
 
         npTensor.assign("H", "invalidOperation", "G");
-        
         assertNull(npTensor.getValue("H"));
         assertFalse(npTensor.ok());
     }
-
+    
     @Test
     public void shouldSliceTensor() {
         int[] shape = {3, 3};
@@ -145,6 +136,8 @@ public class NPTensorTest {
         int[] parameters = {2,6};
         npTensor.assign("B", "slice", "A", parameters);
         assertEquals("[[3, 4, 5, 6]]", npTensor.getValue("B").toString());
+        // La operación debe ser exitosa
+        assertTrue(npTensor.ok());
     }
     
     @Test
@@ -153,8 +146,6 @@ public class NPTensorTest {
         int[] shape = {3, 3};
         int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         npTensor.assign("A", shape, values);
-    
-        // Calcular el promedio del tensor A
         int axis = 0;
         npTensor.assign("B", "mean", "A", new int[]{axis});
     
@@ -199,6 +190,74 @@ public class NPTensorTest {
         int[] expectedValues2 = {-1}; // Valor no encontrado
         assertArrayEquals(expectedValues2, result2.getValues());
     }
+    
+    @Test
+    public void shouldAddTwoTensors() {
+        int[] shape = {2, 2};
+        int[] valuesA = {1, 2, 3, 4};
+        int[] valuesB = {5, 6, 7, 8};
+        npTensor.assign("A", shape, valuesA);
+        npTensor.assign("B", shape, valuesB);
+    
+        npTensor.assign("C", "A", "add", "B");
+    
+        Tensor tensorC = npTensor.getValue("C");
+        assertNotNull(tensorC);
+    
+        int[] expectedShape = {2, 2};
+        assertArrayEquals(expectedShape, tensorC.getShape());
+    
+        int[] expectedValues = {6, 8, 10, 12};
+        assertArrayEquals(expectedValues, tensorC.getValues());
+        
+        assertTrue(npTensor.ok());
+    }
 
+    @Test
+    public void shouldSubtractTwoTensors() {
+        int[] shape = {3, 3};
+        int[] valuesA = {5, 6, 7, 8, 6, 10, 8, 2, 5};
+        int[] valuesB = {1, 3, 3, 4, 5, 8, 7, 2, 2};
+        npTensor.assign("A", shape, valuesA);
+        npTensor.assign("B", shape, valuesB);
 
+        npTensor.assign("C", "A", "subtract", "B");
+
+        Tensor tensorC = npTensor.getValue("C");
+        assertNotNull(tensorC);
+
+        int[] expectedShape = {3, 3};
+        assertArrayEquals(expectedShape, tensorC.getShape());
+
+        int[] expectedValues = {4, 3, 4, 4, 1, 2, 1, 0, 3}; // Resultado de la resta A - B
+        assertArrayEquals(expectedValues, tensorC.getValues());
+
+        assertTrue(npTensor.ok());
+    }
+
+    @Test
+    public void shouldMultiplyTwoTensors() {
+        int[] shape = {2, 2};
+        int[] valuesA = {5, 3, 8, 4};
+        int[] valuesB = {1, 6, 3, 7};
+        npTensor.assign("A", shape, valuesA);
+        npTensor.assign("B", shape, valuesB);
+
+        npTensor.assign("C", "A", "multiply", "B");
+
+        Tensor tensorC = npTensor.getValue("C");
+        assertNotNull(tensorC);
+
+        int[] expectedShape = {2, 2};
+        assertArrayEquals(expectedShape, tensorC.getShape());
+
+        int[] expectedValues = {5, 18, 24, 28}; // Resultado de la resta A - B
+        assertArrayEquals(expectedValues, tensorC.getValues());
+
+        assertTrue(npTensor.ok());
+    }
 }
+
+
+
+

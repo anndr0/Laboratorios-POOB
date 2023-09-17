@@ -149,6 +149,7 @@ private String buildString(Tensor tensor, int level, int[] indices) {
         return this.values;
         
     }
+    
     public int[] slice(int[] list, int start, int end, int step) {
         int[] result = new int[0];
         for (int i = start; i < end; i += step) {
@@ -157,49 +158,15 @@ private String buildString(Tensor tensor, int level, int[] indices) {
         }
         return result;
     }
-    
 
 
-
-    private void calculateIndices(int[] indices, int flatIndex) {
+private void calculateIndices(int[] indices, int flatIndex) {
         for (int i = shape.length - 1; i >= 0; i--) {
             indices[i] = flatIndex % shape[i];
             flatIndex /= shape[i];
         }
     }
     
-public Tensor mean(int axis) {
-    if (axis < 0 || axis >= shape.length) {
-        throw new IllegalArgumentException("Invalid axis for mean operation.");
-    }
-
-    int[] newShape = new int[shape.length - 1];
-    int newSize = 1;
-
-    for (int i = 0, j = 0; i < shape.length; i++) {
-        if (i != axis) {
-            newShape[j++] = shape[i];
-            newSize *= shape[i];
-        }
-    }
-
-    int[] meanValues = new int[newSize];
-    int divisor = shape[axis];
-
-    for (int i = 0; i < newSize; i++) {
-        int sum = 0;
-        for (int j = 0; j < divisor; j++) {
-            int[] indices = new int[shape.length];
-            calculateIndices(indices, i);
-            indices[axis] = j;
-            int flatIndex = calculateFlatIndex(indices);
-            sum += values[flatIndex];
-        }
-        meanValues[i] = sum / divisor;
-    }
-
-    return new Tensor(newShape, meanValues);
-}
 
 public int find(int value) {
     for (int i = 0; i < values.length; i++) {
@@ -209,6 +176,33 @@ public int find(int value) {
     }
     return -1; // Si no se encuentra el valor, retorna -1
 }
+
+public Tensor subtract(Tensor other) {
+    if (!Arrays.equals(this.shape, other.shape)) {
+        throw new IllegalArgumentException("Los tensores deben tener la misma forma para la resta.");
+    }
+
+    int[] resultValues = new int[values.length];
+    for (int i = 0; i < values.length; i++) {
+        resultValues[i] = this.values[i] - other.values[i];
+    }
+
+    return new Tensor(this.shape, resultValues);
+}
+
+public Tensor multiply(Tensor other) {
+    if (!Arrays.equals(this.shape, other.shape)) {
+        throw new IllegalArgumentException("Los tensores deben tener la misma forma para la multiplicación.");
+    }
+
+    int[] resultValues = new int[values.length];
+    for (int i = 0; i < values.length; i++) {
+        resultValues[i] = this.values[i] * other.values[i];
+    }
+
+    return new Tensor(this.shape, resultValues);
+}
+
 
 
 }
