@@ -7,17 +7,25 @@ import org.junit.Test;
 
 public class TensorTest {
 
-    
+    /**
+     * Método de configuración que se ejecuta una vez antes de que comiencen todas las pruebas.
+     */
     @BeforeClass
     public static void beforeClass(){
         
     }
-    
+
+    /**
+     * Método de configuración que se ejecuta antes de cada prueba individual.
+     */
     @Before
     public void before(){
         
     }
     
+    /**
+     * Prueba la creación de un tensor y la obtención de valores.
+     */
     @Test
     public void shouldCreateTensor() {
         int [] shape = {1,2,3};
@@ -28,7 +36,9 @@ public class TensorTest {
         assertEquals(5,t.value(two));
     }
 
-
+    /**
+     * Prueba la comparación de igualdad entre dos tensores.
+     */
     @Test
     public void shouldKnowWhenTwoTensorAreEquals () {
         int [] shapeA= {3,4,5};
@@ -41,7 +51,9 @@ public class TensorTest {
         assertEquals(new Tensor(shapeA,5), new Tensor(shapeA,5));
     }
     
-
+    /**
+     * Prueba la representación de un tensor como una cadena de texto.
+     */
     @Test
     public void shouldRepresentATensorAsAString() {
         int [] shapeA = {3, 3} ;
@@ -50,6 +62,9 @@ public class TensorTest {
         assertEquals("[[[5, 5, 5], [5, 5, 5]], [[5, 5, 5], [5, 5, 5]]]", new Tensor(shapeB, 5).toString());
     }   
     
+    /**
+     * Prueba la operación de suma entre dos tensores.
+     */
     @Test
     public void shouldAdd() {
         int [] shapeA = {3, 3};
@@ -58,24 +73,5 @@ public class TensorTest {
         assertEquals(new Tensor(shapeA, 6), new Tensor(shapeA, 1).add(new Tensor(shapeA, 5)));
         assertEquals(tB, tB.add(new Tensor(shapeB, 0)));
     }
-/*   
-@Test
-    public void shouldPass() {
-        int a = 10;
-        int b = 10;
-        assertEquals(a, b);
-    }
-
-    @Test
-    public void shouldFail() {
-        int a = 10;
-        int b = 20;
-        assertEquals(a, b);
-    }
-@Test
-public void shouldErr() {
-    int result = 10 / 0; // Esto causará una excepción de división por cero
-}
-*/
 
 }
