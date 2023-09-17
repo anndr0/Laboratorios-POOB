@@ -139,42 +139,12 @@ public class NPTensorTest {
     
     @Test
     public void shouldSliceTensor() {
-        int[] shape = {2, 3, 4}; // Un tensor de 3 dimensiones (2x3x4)
-        int[] values = new int[shape[0] * shape[1] * shape[2]];
-        // Llenar el tensor con valores consecutivos para facilitar las pruebas
-        for (int i = 0; i < values.length; i++) {
-            values[i] = i;
-        }
+        int[] shape = {3, 3};
+        int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         npTensor.assign("A", shape, values);
-
-        // Definir los parámetros para la operación de slice
-        int[] parameters = {1, 0, 2, 2, 0, 3}; // Inicio y fin para cada dimensión
-
-        // Realizar la operación de slice en el tensor A
+        int[] parameters = {2,6};
         npTensor.assign("B", "slice", "A", parameters);
-
-        // Obtener el tensor resultante
-        Tensor tensorB = npTensor.getValue("B");
-        assertNotNull(tensorB);
-
-        // Verificar que las dimensiones del tensor B sean las esperadas
-        int[] expectedShape = {2, 3, 4}; // Mismo tamaño que el tensor original
-        assertArrayEquals(expectedShape, tensorB.getShape());
-
-        // Verificar los valores en el tensor resultante
-        int[] expectedValues = {
-            12, 13, 14, 15,
-            24, 25, 26, 27,
-            36, 37, 38, 39,
-            48, 49, 50, 51,
-            60, 61, 62, 63,
-            72, 73, 74, 75
-        };
-
-        assertArrayEquals(expectedValues, tensorB.getValues());
-        
-        // La operación debe ser exitosa
-        assertTrue(npTensor.ok());
+        assertEquals("[[3, 4, 5, 6]]", npTensor.getValue("B").toString());
     }
     
     @Test
