@@ -73,22 +73,16 @@ public class NPTensor {
         public void assign(String a, String unary, String b, int[] parameters) {
         Tensor tensorB = variables.get(b);
         if (unary.equals("slice")) {
-            if (parameters.length % 2 != 0) {
-                operationSuccess = false; // El número de parámetros debe ser par (inicio y fin para cada dimensión).
-                return;
-            }
-
-            int numDimensions = parameters.length / 2;
-            int[] start = new int[numDimensions];
-            int[] end = new int[numDimensions];
-
-            for (int i = 0; i < numDimensions; i++) {
-                start[i] = parameters[i * 2];
-                end[i] = parameters[i * 2 + 1];
-            }
-
-            Tensor slicedTensor = tensorB.slice(start, end);
-            variables.put(a, slicedTensor);
+            if(parameters.length == 3) {
+                int[] tensorSlice = tensorB.slice(tensorB.getValues(), parameters[0], parameters[1], parameters[2]);
+                int[] tensorShape = {1, tensorSlice.length};
+                variables.put(a, new Tensor(tensorShape, tensorSlice));
+            } else if (parameters.length == 2) {
+                int[] tensorSlice = tensorB.slice(tensorB.getValues(), parameters[0], parameters[1], 1);
+                int[] tensorShape = {1, tensorSlice.length};
+                variables.put(a, new Tensor(tensorShape, tensorSlice));
+            } else {
+                throw new IllegalArgumentException("Incorret number");
         } else if (unary.equals("mean")) {
         
             if (parameters.length != 1) {
