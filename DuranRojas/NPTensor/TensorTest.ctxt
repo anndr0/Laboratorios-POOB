@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=TensorTest
+comment1.params=
+comment1.target=void\ beforeClass()
+comment1.text=\r\n\ M\u00E9todo\ de\ configuraci\u00F3n\ que\ se\ ejecuta\ una\ vez\ antes\ de\ que\ comiencen\ todas\ las\ pruebas.\r\n
+comment2.params=
+comment2.target=void\ before()
+comment2.text=\r\n\ M\u00E9todo\ de\ configuraci\u00F3n\ que\ se\ ejecuta\ antes\ de\ cada\ prueba\ individual.\r\n
+comment3.params=
+comment3.target=void\ shouldCreateTensor()
+comment3.text=\r\n\ Prueba\ la\ creaci\u00F3n\ de\ un\ tensor\ y\ la\ obtenci\u00F3n\ de\ valores.\r\n
+comment4.params=
+comment4.target=void\ shouldKnowWhenTwoTensorAreEquals()
+comment4.text=\r\n\ Prueba\ la\ comparaci\u00F3n\ de\ igualdad\ entre\ dos\ tensores.\r\n
+comment5.params=
+comment5.target=void\ shouldRepresentATensorAsAString()
+comment5.text=\r\n\ Prueba\ la\ representaci\u00F3n\ de\ un\ tensor\ como\ una\ cadena\ de\ texto.\r\n
+comment6.params=
+comment6.target=void\ shouldAdd()
+comment6.text=\r\n\ Prueba\ la\ operaci\u00F3n\ de\ suma\ entre\ dos\ tensores.\r\n
+numComments=7
