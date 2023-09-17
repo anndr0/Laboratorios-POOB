@@ -70,9 +70,64 @@ public class NPTensor {
     }
 
     // Assigns the value of an operation to a variable (unary operations with parameters)
-    public void assign(String a, String unary, String b, int[] parameters) {
+        public void assign(String a, String unary, String b, int[] parameters) {
+        Tensor tensorB = variables.get(b);
+
+        if (unary.equals("slice")) {
+            if(parameters.length == 3) {
+                int[] tensorSlice = tensorB.slice(tensorB.getValues(), parameters[0], parameters[1], parameters[2]);
+                int[] tensorShape = {1, tensorSlice.length};
+                variables.put(a, new Tensor(tensorShape, tensorSlice));
+            } else if (parameters.length == 2) {
+                int[] tensorSlice = tensorB.slice(tensorB.getValues(), parameters[0], parameters[1], 1);
+                int[] tensorShape = {1, tensorSlice.length};
+                variables.put(a, new Tensor(tensorShape, tensorSlice));
+            } else {
+                throw new IllegalArgumentException("Incorret number");
+            }
+
+
+        } else if (unary.equals("mean")) {
+
+        if (parameters.length != 1) {
+        operationSuccess = false; // Parámetros insuficientes para la operación "mean"
+        return;
+        }
+               
+        // Obtener los valores del tensor
+        int[] values = tensorB.getValues();
+        // Calcular la suma de los elementos
+        int sum = 0;
+        for (int value : values) {
+            sum += value;
+        }
+        // Calcular el promedio
+        int size = values.length;
+        int meanValue = (size > 0) ? sum / size : 0;
         
+        // Crear un tensor con el valor promedio y asignarlo a
+        int[] shape = { 1 };
+        int[] meanValues = { meanValue };
+        Tensor meanTensor = new Tensor(shape, meanValues);
+        variables.put(a, meanTensor);
+        
+    } else if (unary.equals("find")) {
+            if (parameters.length != 1) {
+                operationSuccess = false; // Parámetros insuficientes para la operación "find"
+                return;
+            }
+            int value = parameters[0];
+            int foundIndex = tensorB.find(value);
+            // Crea un tensor con el índice encontrado y asigna el resultado a 'a'
+            int[] shape = { 1 };
+            int[] values = { foundIndex };
+            Tensor indexTensor = new Tensor(shape, values);
+            variables.put(a, indexTensor);
+        } else {
+            operationSuccess = false; // Operación no válida
+        }
     }
+
 
     // Assigns the value of a simple binary operation to a variable (one to one)
     public void assign(String a, String b, String sBinary, String c) {
@@ -106,6 +161,3 @@ public class NPTensor {
 
 
     
-
-
-
