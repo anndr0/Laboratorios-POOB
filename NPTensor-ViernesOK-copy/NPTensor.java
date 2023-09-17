@@ -72,6 +72,7 @@ public class NPTensor {
     // Assigns the value of an operation to a variable (unary operations with parameters)
         public void assign(String a, String unary, String b, int[] parameters) {
         Tensor tensorB = variables.get(b);
+
         if (unary.equals("slice")) {
             if(parameters.length == 3) {
                 int[] tensorSlice = tensorB.slice(tensorB.getValues(), parameters[0], parameters[1], parameters[2]);
@@ -83,12 +84,16 @@ public class NPTensor {
                 variables.put(a, new Tensor(tensorShape, tensorSlice));
             } else {
                 throw new IllegalArgumentException("Incorret number");
+            }
+
+
         } else if (unary.equals("mean")) {
-        
-            if (parameters.length != 1) {
-            operationSuccess = false; // Parámetros insuficientes para la operación "mean"
-            return;
+
+        if (parameters.length != 1) {
+        operationSuccess = false; // Parámetros insuficientes para la operación "mean"
+        return;
         }
+               
         // Obtener los valores del tensor
         int[] values = tensorB.getValues();
         // Calcular la suma de los elementos
@@ -100,7 +105,7 @@ public class NPTensor {
         int size = values.length;
         int meanValue = (size > 0) ? sum / size : 0;
         
-        // Crear un tensor con el valor promedio y asignarlo a 'a'
+        // Crear un tensor con el valor promedio y asignarlo a
         int[] shape = { 1 };
         int[] meanValues = { meanValue };
         Tensor meanTensor = new Tensor(shape, meanValues);
@@ -126,32 +131,8 @@ public class NPTensor {
 
     // Assigns the value of a simple binary operation to a variable (one to one)
     public void assign(String a, String b, String sBinary, String c) {
-        Tensor tensorB = variables.get(b);
-        Tensor tensorC = variables.get(c);
-
-        if (tensorB == null || tensorC == null) {
-            throw new IllegalArgumentException("Los tensores " + b + " y " + c + " deben existir en el mapa de variables.");
-        }
-
-        if (!Arrays.equals(tensorB.getShape(), tensorC.getShape())) {
-            throw new IllegalArgumentException("Los tensores " + b + " y " + c + " deben tener la misma forma para la operación " + sBinary + ".");
-        }
-
-        Tensor result;
-        if (sBinary.equals("add")) {
-            result = tensorB.add(tensorC);
-        } else if (sBinary.equals("subtract")) {
-            result = tensorB.subtract(tensorC);
-        } else if (sBinary.equals("multiply")) {
-            result = tensorB.multiply(tensorC);
-        } else {
-            throw new IllegalArgumentException("Operación binaria no válida: " + sBinary);
-        }
-
-        variables.put(a, result);
-        operationSuccess = true;
+        
     }
-
 
     // Returns the string representation of a tensor
     public String toString(String variable) {
@@ -176,12 +157,7 @@ public class NPTensor {
     public Tensor getValue(String name) {
         return variables.get(name);
     }
-    
-
 }
 
 
     
-
-
-

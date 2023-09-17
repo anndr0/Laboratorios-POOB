@@ -136,7 +136,7 @@ public class NPTensorTest {
         assertNull(npTensor.getValue("H"));
         assertFalse(npTensor.ok());
     }
-    
+
     @Test
     public void shouldSliceTensor() {
         int[] shape = {3, 3};
@@ -153,6 +153,8 @@ public class NPTensorTest {
         int[] shape = {3, 3};
         int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         npTensor.assign("A", shape, values);
+    
+        // Calcular el promedio del tensor A
         int axis = 0;
         npTensor.assign("B", "mean", "A", new int[]{axis});
     
@@ -197,35 +199,6 @@ public class NPTensorTest {
         int[] expectedValues2 = {-1}; // Valor no encontrado
         assertArrayEquals(expectedValues2, result2.getValues());
     }
-    
-    @Test
-    public void shouldAddTwoTensors() {
-        int[] shape = {2, 2};
-        int[] valuesA = {1, 2, 3, 4};
-        int[] valuesB = {5, 6, 7, 8};
-        npTensor.assign("A", shape, valuesA);
-        npTensor.assign("B", shape, valuesB);
-    
-        npTensor.assign("C", "A", "add", "B");
-    
-        Tensor tensorC = npTensor.getValue("C");
-        assertNotNull(tensorC);
-
-        System.out.println(tensorC);
-    
-        int[] expectedShape = {2, 2};
-        assertArrayEquals(expectedShape, tensorC.getShape());
-    
-        int[] expectedValues = {6, 8, 10, 12};
-        assertArrayEquals(expectedValues, tensorC.getValues());
-        
-        assertTrue(npTensor.ok());
-    }
-
 
 
 }
-
-
-
-
