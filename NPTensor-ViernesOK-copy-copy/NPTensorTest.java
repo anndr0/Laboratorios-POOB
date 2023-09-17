@@ -16,6 +16,9 @@ public class NPTensorTest {
         npTensor = new NPTensor();
     }
 
+    /**
+     * Prueba la asignación de un tensor con todos sus elementos con el mismo valor.
+     */
     @Test
     public void shouldAssignTensorWithSameValue() {
         int[] shape = {3, 3};
@@ -27,6 +30,9 @@ public class NPTensorTest {
         assertEquals(value, tensorA.value(new int[]{2,2}));
     }
 
+    /**
+     * Prueba la asignación de un tensor con valores específicos.
+     */
     @Test
     public void shouldAssignTensorWithGivenValues() {
         int[] shape = {2, 2};
@@ -47,7 +53,10 @@ public class NPTensorTest {
         assertArrayEquals(values, retrievedValues);
         assertTrue(npTensor.ok());
     }
-
+    
+    /**
+     * Prueba que no se pueda asignar un tensor con valores que no coinciden con la forma especificada.
+     */
     @Test
     public void shouldNotAssignMismatchedValues() {
         int[] shape = {2, 2};
@@ -57,7 +66,10 @@ public class NPTensorTest {
         assertNull(npTensor.getValue("C"));
         assertFalse(npTensor.ok());
     }
-
+    
+    /**
+     * Prueba que no se pueda asignar un tensor con una forma vacía.
+     */
     @Test
     public void shouldNotAssignEmptyShape() {
         int[] shape = {}; // vacio
@@ -68,6 +80,9 @@ public class NPTensorTest {
         assertFalse(npTensor.ok());
     }
     
+    /**
+     * Prueba la asignación de la forma de un tensor.
+     */
     @Test
     public void testAssignShapeOperation() {
         NPTensor npTensor = new NPTensor();
@@ -82,7 +97,10 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
         assertEquals(Arrays.toString(shape), npTensor.toString("B"));
     }
-
+    
+    /**
+     * Prueba la operación de reshape en un tensor.
+     */
     @Test
     public void shouldReshapeTensor() {
         // Crear un tensor con dimensiones originales [2, 3]
@@ -102,7 +120,9 @@ public class NPTensorTest {
         // La operación debe ser exitosa
         assertTrue(npTensor.ok());
     }
-
+    /**
+     * Prueba la asignación de un tensor barajado.
+     */
     @Test
     public void shouldAssignShuffledTensor() {
         int[] shapeE = {2, 3};
@@ -117,6 +137,9 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
     }
 
+    /**
+     * Prueba que no se pueda realizar una operación unary no válida.
+     */
     @Test
     public void shouldNotAssignInvalidUnaryOperation() {
         int[] shapeG = {2, 2};
@@ -127,7 +150,10 @@ public class NPTensorTest {
         assertNull(npTensor.getValue("H"));
         assertFalse(npTensor.ok());
     }
-    
+
+    /**
+     * Prueba la operación de slice en un tensor.
+     */
     @Test
     public void shouldSliceTensor() {
         int[] shape = {3, 3};
@@ -139,7 +165,10 @@ public class NPTensorTest {
         // La operación debe ser exitosa
         assertTrue(npTensor.ok());
     }
-    
+
+    /**
+     * Prueba el cálculo de la media en un tensor.
+     */
     @Test
     public void shouldCalculateMean() {
         // Crear un tensor con algunos valores
@@ -163,7 +192,9 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
     }
 
-    
+    /**
+     * Prueba la búsqueda de un valor en un tensor.
+     */
     @Test
     public void shouldFindValueInTensor() {
         int[] shape = {3, 3};
@@ -191,6 +222,9 @@ public class NPTensorTest {
         assertArrayEquals(expectedValues2, result2.getValues());
     }
     
+    /**
+     * Prueba que no se pueda realizar una operación de slice con un número incorrecto de parámetros.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotSliceTensorWithIncorrectNumberOfParameters() {
         int[] shape = {2, 3, 4}; // Un tensor de 3 dimensiones (2x3x4)
@@ -208,6 +242,9 @@ public class NPTensorTest {
         npTensor.assign("B", "slice", "A", parameters);
     }
 
+    /**
+     * Prueba la suma de dos tensores.
+     */
     @Test
     public void shouldAddTwoTensors() {
         int[] shape = {2, 2};
@@ -230,6 +267,9 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
         }
 
+    /**
+     * Prueba la resta de dos tensores.
+     */
     @Test
     public void shouldSubtractTwoTensors() {
         int[] shape = {3, 3};
@@ -252,6 +292,9 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
     }
 
+    /**
+     * Prueba la multiplicación de dos tensores.
+     */
     @Test
     public void shouldMultiplyTwoTensors() {
         int[] shape = {2, 2};
@@ -273,7 +316,10 @@ public class NPTensorTest {
 
         assertTrue(npTensor.ok());
     }
-    
+
+    /**
+     * Prueba que no se pueda realizar una operación binaria con tensores de formas diferentes.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotPerformBinaryOperationWithDifferentShapes() {
         int[] shapeA = {2, 2};
@@ -288,6 +334,9 @@ public class NPTensorTest {
         npTensor.assign("C", "A", "add", "B");
     }
     
+    /**
+     * Prueba el cálculo de la norma en un tensor.
+     */
     @Test
     public void shouldCalculateNorm() {
         int[] shape = {3, 3};
@@ -309,6 +358,9 @@ public class NPTensorTest {
         assertTrue(npTensor.ok());
     }
     
+    /**
+     * Prueba el cálculo de la traza en una matriz cuadrada.
+     */
     @Test
     public void shouldCalculateTrace() {
         int[] shape = {3, 3};
@@ -329,7 +381,10 @@ public class NPTensorTest {
     
         assertTrue(npTensor.ok());
     }
-    
+
+    /**
+     * Prueba la multiplicación de una matriz por un escalar.
+     */
     @Test
     public void shouldMultiplyMatrixByScalar() {
         int[] shape = {2, 3};
