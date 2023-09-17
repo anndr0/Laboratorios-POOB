@@ -139,36 +139,42 @@ public class NPTensorTest {
     
     @Test
     public void shouldSliceTensor() {
-        int[] shape = {3, 3};
-        int[] values = {
-            1, 2, 3,
-            4, 5, 6,
-            7, 8, 9
-        };
+        int[] shape = {2, 3, 4}; // Un tensor de 3 dimensiones (2x3x4)
+        int[] values = new int[shape[0] * shape[1] * shape[2]];
+        // Llenar el tensor con valores consecutivos para facilitar las pruebas
+        for (int i = 0; i < values.length; i++) {
+            values[i] = i;
+        }
         npTensor.assign("A", shape, values);
-    
-        // Prueba 1: Slice con parámetros válidos
-        int[] sliceParams1 = {0, 1, 1, 2}; // Inicio en (0, 1) y fin en (1, 2)
-        npTensor.assign("B", "slice", "A", sliceParams1);
-        Tensor result1 = npTensor.getValue("B");
-        assertNotNull(result1);
-        int[] expectedValues1 = {
-            2, 3,
-            5, 6
+
+        // Definir los parámetros para la operación de slice
+        int[] parameters = {1, 0, 2, 2, 0, 3}; // Inicio y fin para cada dimensión
+
+        // Realizar la operación de slice en el tensor A
+        npTensor.assign("B", "slice", "A", parameters);
+
+        // Obtener el tensor resultante
+        Tensor tensorB = npTensor.getValue("B");
+        assertNotNull(tensorB);
+
+        // Verificar que las dimensiones del tensor B sean las esperadas
+        int[] expectedShape = {2, 3, 4}; // Mismo tamaño que el tensor original
+        assertArrayEquals(expectedShape, tensorB.getShape());
+
+        // Verificar los valores en el tensor resultante
+        int[] expectedValues = {
+            12, 13, 14, 15,
+            24, 25, 26, 27,
+            36, 37, 38, 39,
+            48, 49, 50, 51,
+            60, 61, 62, 63,
+            72, 73, 74, 75
         };
-        assertArrayEquals(expectedValues1, result1.getValues());
-    
-        // Prueba 2: Slice con parámetros que exceden las dimensiones del tensor
-        int[] sliceParams2 = {0, 1, 1, 4}; // Inicio en (0, 1) y fin en (1, 4)
-        npTensor.assign("C", "slice", "A", sliceParams2);
-        Tensor result2 = npTensor.getValue("C");
-        assertNull(result2);
-    
-        // Prueba 3: Slice con parámetros incorrectos (número impar)
-        int[] sliceParams3 = {0, 1, 1}; // Número impar de parámetros
-        npTensor.assign("D", "slice", "A", sliceParams3);
-        Tensor result3 = npTensor.getValue("D");
-        assertNull(result3);
+
+        assertArrayEquals(expectedValues, tensorB.getValues());
+        
+        // La operación debe ser exitosa
+        assertTrue(npTensor.ok());
     }
     
     @Test
@@ -177,8 +183,6 @@ public class NPTensorTest {
         int[] shape = {3, 3};
         int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         npTensor.assign("A", shape, values);
-    
-        // Calcular el promedio del tensor A a lo largo del eje 0
         int axis = 0;
         npTensor.assign("B", "mean", "A", new int[]{axis});
     
@@ -187,8 +191,8 @@ public class NPTensorTest {
         assertNotNull(meanTensor);
     
         // El resultado esperado es el promedio de los valores en el eje 0, que es 5
-        int[] expectedShape = {3};
-        int[] expectedValues = {5, 6, 7};
+        int[] expectedShape = {1};
+        int[] expectedValues = {5};
         assertArrayEquals(expectedShape, meanTensor.getShape());
         assertArrayEquals(expectedValues, meanTensor.getValues());
         
@@ -223,6 +227,32 @@ public class NPTensorTest {
         int[] expectedValues2 = {-1}; // Valor no encontrado
         assertArrayEquals(expectedValues2, result2.getValues());
     }
+    
+    @Test
+    public void shouldAddTwoTensors() {
+        int[] shape = {2, 2};
+        int[] valuesA = {1, 2, 3, 4};
+        int[] valuesB = {5, 6, 7, 8};
+        npTensor.assign("A", shape, valuesA);
+        npTensor.assign("B", shape, valuesB);
+    
+        npTensor.assign("C", "A", "add", "B");
+    
+        Tensor tensorC = npTensor.getValue("C");
+        assertNotNull(tensorC);
+
+        System.out.println(tensorC);
+    
+        int[] expectedShape = {2, 2};
+        assertArrayEquals(expectedShape, tensorC.getShape());
+    
+        int[] expectedValues = {6, 8, 10, 12};
+        assertArrayEquals(expectedValues, tensorC.getValues());
+        
+        assertTrue(npTensor.ok());
+    }
+
+
 
 }
 

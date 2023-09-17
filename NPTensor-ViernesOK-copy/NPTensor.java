@@ -72,23 +72,21 @@ public class NPTensor {
     // Assigns the value of an operation to a variable (unary operations with parameters)
         public void assign(String a, String unary, String b, int[] parameters) {
         Tensor tensorB = variables.get(b);
-    
         if (unary.equals("slice")) {
             if (parameters.length % 2 != 0) {
                 operationSuccess = false; // El número de parámetros debe ser par (inicio y fin para cada dimensión).
                 return;
             }
-    
+
             int numDimensions = parameters.length / 2;
             int[] start = new int[numDimensions];
             int[] end = new int[numDimensions];
-    
+
             for (int i = 0; i < numDimensions; i++) {
                 start[i] = parameters[i * 2];
                 end[i] = parameters[i * 2 + 1];
             }
-    
-            // Realiza el corte en tensorB usando los rangos definidos por start y end
+
             Tensor slicedTensor = tensorB.slice(start, end);
             variables.put(a, slicedTensor);
         } else if (unary.equals("mean")) {
@@ -97,7 +95,6 @@ public class NPTensor {
             operationSuccess = false; // Parámetros insuficientes para la operación "mean"
             return;
         }
-               
         // Obtener los valores del tensor
         int[] values = tensorB.getValues();
         // Calcular la suma de los elementos
@@ -135,8 +132,32 @@ public class NPTensor {
 
     // Assigns the value of a simple binary operation to a variable (one to one)
     public void assign(String a, String b, String sBinary, String c) {
-        
+        Tensor tensorB = variables.get(b);
+        Tensor tensorC = variables.get(c);
+
+        if (tensorB == null || tensorC == null) {
+            throw new IllegalArgumentException("Los tensores " + b + " y " + c + " deben existir en el mapa de variables.");
+        }
+
+        if (!Arrays.equals(tensorB.getShape(), tensorC.getShape())) {
+            throw new IllegalArgumentException("Los tensores " + b + " y " + c + " deben tener la misma forma para la operación " + sBinary + ".");
+        }
+
+        Tensor result;
+        if (sBinary.equals("add")) {
+            result = tensorB.add(tensorC);
+        } else if (sBinary.equals("subtract")) {
+            result = tensorB.subtract(tensorC);
+        } else if (sBinary.equals("multiply")) {
+            result = tensorB.multiply(tensorC);
+        } else {
+            throw new IllegalArgumentException("Operación binaria no válida: " + sBinary);
+        }
+
+        variables.put(a, result);
+        operationSuccess = true;
     }
+
 
     // Returns the string representation of a tensor
     public String toString(String variable) {
@@ -161,6 +182,8 @@ public class NPTensor {
     public Tensor getValue(String name) {
         return variables.get(name);
     }
+    
+
 }
 
 
